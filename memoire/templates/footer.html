@@ -1,0 +1,57 @@
+<div class="container-fluid align-bottom bottom-100 mt-5">
+  <footer class="row justify-content-md-between gpi-bg-primary py-5">
+    <div class="col-md-5 col-lg-4 d-flex justify-content-center align-items-center">
+      <a href="/" class="mb-3 me-2 mb-md-0 text-light text-decoration-none lh-1">
+        <i class="bi bi-tools fs-4"></i>
+      </a>
+      <span class="mb-3 mb-md-0 text-light"> GPI-Benin © 2023 . Tous droits réservés</span></span>
+    </div>
+
+    <div class="col-md-7 col-lg-6 navbar navbar-expand-md navbar-dark">
+      <ul class="navbar-nav m-auto mb-2 mb-lg-0  nav">
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'employees:index' %}
+          <a class="nav-link active fw-bold" aria-current="page" href="{% url "employees:index" %}">Home</a>
+          {% else %}
+          <a class="nav-link fw-bold" aria-current="page" href="{% url "employees:index" %}">Home</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'employees:user-profile' %}
+          <a class="nav-link active fw-bold" href="{% url "employees:user-profile" %}">Profil</a>
+          {% else %}
+          <a class="nav-link fw-bold" href="{% url "employees:user-profile" %}">Profil</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'employees:a-propos' %}
+          <a class="nav-link active fw-bold" href="{% url "employees:a-propos" %}">A Propos</a>
+          {% else %}
+          <a class="nav-link fw-bold" href="{% url "employees:a-propos" %}">A Propos</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'employees:contact-us' %}
+          <a class="nav-link active fw-bold" href="{% url "employees:contact-us" %}">Contacts</a>
+          {% else %}
+          <a class="nav-link fw-bold" href="{% url "employees:contact-us" %}">Contacts</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'admin:index' %}
+          <a class="nav-link active disabled fw-bold" href="{% url "admin:index" %}">admin</a>
+          {% else %}
+          <a class="nav-link disabled fw-bold" href="{% url "admin:index" %}">admin</a>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+    
+
+    <div id="contact" class="nav col-lg-2 list-unstyled d-flex justify-content-center align-items-center">
+      <li class="ms-3"><a class="text-decoration-none text-light" href="#"><i class="bi bi-twitter"></i></a></li>
+      <li class="ms-3"><a class="text-decoration-none text-light" href="#"><i class="bi bi-instagram"></i></a></li>
+      <li class="ms-3"><a class="text-decoration-none text-light" href="#"><i class="bi bi-facebook"></i></a></li>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,39 @@
+{% extends 'profile.html' %}
+{% block entete %}
+    <div class="text-end"><button class="btn btn-primary"><a class="text-decoration-none text-light" href="{% url "divisions:create-division" %}"><i class="bi bi-plus-circle-fill"></i> Ajouter</a></button></div>
+{% endblock entete %}
+{% block main %}
+  <table id="example" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for division in divisions %}
+        <tr>
+          <td>{{ division.id }}</td>
+          <td>{{ division.code }}</td>
+          <td>{{ division.nom }}</td>
+          <td>
+            <form action="" method="get">
+              <input type="hidden" value="{{ division.id }}" name="division_id" id="division_id">
+            </form>
+            <i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="bi bi-trash3-fill"></i>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Id</th>
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Action</th>
+      </tr>
+    </tfoot>
+  </table>
+{% endblock %}

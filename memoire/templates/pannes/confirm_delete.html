@@ -1,0 +1,17 @@
+{% extends "base_profile.html" %}
+
+{% block content %}
+  <div class="container d-flex justify-content-center">
+    <div>
+      <h1>Delete {{ object }}</h1>
+      <p>Are you sure you want to delete {{ object }}?</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-danger">Yes, delete</button><div class="col-sm-2"></div>
+          <button class="btn btn-secondary"><a class="text-decoration-none text-light" href="{% url 'pannes:all-panne'%}">Annuler</a></button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

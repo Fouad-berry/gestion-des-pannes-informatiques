@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <form method="post" class="offset-md-1 row col-md-8 col-sm-6 col px-3 shadow pt-3 mx-2 mx-md-5" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label">{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-primary col-6 col-md-8 offset-md-2 offset-3 mb-3" id="add-review-form" value="Ajouter" />
+  </form>
+{% endblock %}

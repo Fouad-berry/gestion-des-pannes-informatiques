@@ -1,0 +1,198 @@
+{% extends 'profile2.html' %}
+{% load static %}
+{% block title %}Directions{% endblock title %}
+{% block main %}
+  <div class="row d-flex mb-3">
+    <button type="button" class="btn-primary ml-auto" id="addDirectionModal" data-bs-toggle="modal" data-bs-target="#addModal"><i class="bi bi-plus-circle mr-2"></i>Nouvelle Direction</button>
+  </div>
+  <table id="example" class="display table table-striped table-bordered" style="width:100%">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for direction in directions %}
+        <tr>
+          <td>{{ direction.id }}</td>
+          <td>{{ direction.code }}</td>
+          <td>{{ direction.nom }}</td>
+          <td>
+            <form action="" method="get">
+              <input type="hidden" value="{{ direction.id }}" name="direction_id" id="direction_id">
+            </form>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" data-direction-pk="{{ direction.id }}"><i class="bi bi-pencil-fill"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn" type="button"><a class="text-decoration-none text-dark delete-link" href="{%  url "directions:delete-direction" direction.id %}"><i class="bi bi-trash3-fill"></i></a></button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Id</th>   
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Action</th>
+      </tr>
+    </tfoot>
+  </table>
+  <script src="{% static "js\jquery-3.6.4.js" %}"></script>
+  <script>
+    $(".delete-link").click(function(){
+      confirm_box = confirm("Are you sure?");
+      if(confirm_box == true)
+        return true;
+      else
+        return false;
+    })
+  
+    $(document).ready(function() {
+      $('.btn').on('click', function(event) {
+        event.preventDefault()
+        var directionId = $(this).data('direction-pk');  // Extract direction ID from data attribute
+  
+        // Make an AJAX GET request to retrieve direction details
+        $.ajax({
+          url: '/directions/direction/' + encodeURIComponent(directionId) ,
+          type: 'GET',
+          success: function(response) {
+            // Handle the response data
+            $('#exampleModal').find('#id_code').val(response['code']);
+            $('#exampleModal').find('#id_nom').val(response['nom']);
+            $('#exampleModal').find('#id').val(response['id']);
+            console.log(response)
+          },
+          error: function(xhr, status, error) {
+            // Handle the error
+            console.log('Error:', error);
+          }
+        });
+      });
+
+
+
+      $('#example').DataTable({
+        scrollX: true,
+      });
+
+      $('#addDirection').on('click', function(event){
+        event.preventDefault();
+        let form = $("#addDirectionForm")
+        let formData = new FormData();
+        console.log(2) 
+        formData.append('nom', $("#addDirectionForm [name=nom]").val());
+        formData.append('code', $("#addDirectionForm [name=code]").val());
+        let csrfTokenValue = $('#addDirectionForm [name=csrfmiddlewaretoken]').val();
+        console.log(3)
+        const request = new Request(decodeURI('{% url "directions:create-direction" %}'), {
+            method: 'POST',
+            body: formData,
+            headers: {'X-CSRFToken': csrfTokenValue}
+        });
+        fetch(request)
+        .then(response => response.json())
+        .then(result => {
+            if(result.message === 'Success') {
+              $("#exampleModal").hide()
+            } else {
+              console.log(result)
+              $("#invalid-feedback").text("Error")
+            }
+            $("#exampleModal").hide()
+        })
+      })
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let saveBtn = document.querySelector("#saveBtn")
+      saveBtn.addEventListener('click', event=>{
+          event.preventDefault();
+          let formData = new FormData();
+          console.log(2) 
+          formData.append('nom', $("#id_nom").val());
+          formData.append('code', $("#id_code").val());
+          formData.append('id', $("#id").val());
+          let csrfTokenValue = $('[name=csrfmiddlewaretoken]').val();
+          console.log(3)
+          const request = new Request(decodeURI("/directions/direction/update/"+ $("#id").val()), {
+              method: 'POST',
+              body: formData,
+              headers: {'X-CSRFToken': csrfTokenValue}
+          });
+          fetch(request)
+          .then(response => response.text())
+          .then(result => {
+              if(result.message == "Success") {
+                  $("#exampleModal").hide()
+              } else {
+                  console.log(result)
+                  $("#invalid-feedback").text("Error")
+              }
+              $("#exampleModal").hide()
+          })
+          console.log(5)
+
+      })
+    });
+
+  </script>
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="overflow: scroll;">
+  <div class="modal-dialog modal-dialog-scrollablec">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" data-id="{{ direction.id }}">Direction</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+        </div>
+        <form id="formData" method="post" action="">
+          <div class="modal-body">
+            <div class="invalid-feedback" id="invalid-feedback"></div>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    </div>  
+                {% endfor %}
+                <input type="hidden" id="id">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="saveBtn" id="saveBtn" class="btn btn-gpi-primary">Enregistrer</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true" style="overflow: scroll;">
+  <div class="modal-dialog modal-dialog-scrollablec">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addModalLabel">Direction</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+        </div>
+        <form id="addDirectionForm" method="post" action="">
+          <div class="modal-body">
+            <div class="invalid-feedback" id="invalid-feedback"></div>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    </div>  
+                {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="saveBtn" id="addDirection" class="btn btn-gpi-primary">Enregistrer</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock modal %}

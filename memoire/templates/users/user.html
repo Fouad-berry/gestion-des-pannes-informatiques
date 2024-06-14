@@ -1,0 +1,213 @@
+{% extends 'profile2.html' %}
+{% load static %}
+{% block title %}Profil{% endblock title %}
+{% block main %}
+  <div class="row">
+      {% if form_submitted %}
+      {% if messages %}
+      <div class="col-12">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+      </div> 
+      {% endif %}
+      {% endif %}
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">
+              {% if user.first_name %}
+              {{ user.first_name }} &nbsp;{{ user.last_name }}
+              {% else %}
+              {{ user.username }}
+              {% endif %}
+            </h5>
+            <p class="text-muted mb-1">
+              {% if employee %}
+              <p class="text-muted mb-0">{{ employee.poste }} &nbsp; {{ employee.service_employee.nom }}</p>
+              <p class="text-muted mb-0">{{ employee.direction_employee.nom }}</p>
+              {% else %}
+              <p class="text-muted mb-0">Administrateur</p>
+              {% endif %}</p>
+            <p class="text-muted mb-4">
+              {% if employee %}
+              <p class="text-muted mb-0">{{ employee.adresse }}</p>
+              {% else %}
+              <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <form class="card-body" method="post" action="{% url "employees:update-user" %}">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Prenom</p>
+              </div>
+              <div class="col-sm-9">
+                  <input type="text"
+                    class="form-control" name="first_name" id="id_first_name" aria-describedby="helpId" value="{{ user.first_name }}">
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Nom</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text"
+                      class="form-control" name="last_name" id="id_last_name" aria-describedby="helpId" value="{{ user.last_name }}">
+                </div>
+              </div>
+              <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <input type="text"
+                      class="form-control" name="email" id="id_email" aria-describedby="helpId" value="{{ user.email }}">
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Contact</p>
+              </div>
+              <div class="col-sm-9">
+                {% if employee %}
+                <input type="text" class="form-control" name="contact" id="id_contact" aria-describedby="helpId" value="{{ employee.contact }}">
+                {% else %}
+                <p class="text-muted mb-0">+229 57131199</p>
+                {% endif %}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Addresse</p>
+              </div>
+              <div class="col-sm-9">
+                {% if employee %}
+                <input type="text" class="form-control" name="adresse" id="id_adresse" aria-describedby="helpId" value="{{ employee.adresse }}">
+                {% else %}
+                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                {% endif %}
+              </div>
+            </div>
+            <hr>
+            {% if employee %}
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Direction</p>
+              </div>
+              <div class="col-sm-9">
+                <input type="hidden" class="direction-employe" value="{{ employee.direction_employee.id}}">
+                <select class="form-control" name="direction_employee" id="id_direction_employee">
+                  {% for direction in directions %}
+                  <option value="{{ direction.id}}">{{ direction.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <hr>
+            {% endif %}
+
+            {% if employee %}
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Service</p>
+              </div>
+              <div class="col-sm-9">
+                <input type="hidden" class="service-employe" value="{{ employee.service_employee.id}}">
+                <select class="form-control" name="service_employee" id="id_service_employee">
+                  {% for service in services %}
+                  <option value="{{ service.id}}">{{ service.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <hr>
+            {% endif %}
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Mot de passe</p>
+              </div>
+              <div class="col-sm-9">
+                <input type="password"
+                      class="form-control" name="" id="" aria-describedby="helpId" value="">
+              </div>
+            </div>
+            <hr>
+
+            <div class="row justify-content-around">
+              <button type="btn" class="btn btn-gpi-primary rounded-pill">Modifier mon mot de passe</button>
+              <button type="submit" class="btn btn-gpi-primary rounded-pill">Changer mes informations</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+  {% comment %} {% if employee.direction.id == direction.id %}{% endif %} {% endcomment %}
+  <script src="{% static "js\jquery-3.6.4.js" %}"></script>
+  <script>
+    $(document).ready(function() {
+      var selectedDirectionId = $(".direction-employe").val();
+      $("select[name=direction_employee]").val(selectedDirectionId);
+
+      var selectedServiceId = $(".service-employe").val();
+      $("select[name=service_employee]").val(selectedServiceId);
+
+
+      $('#id_direction_employee').on('change', function() {
+        var directionId = $(this).find("option:selected").val();  // Get the selected direction ID
+        var serviceSelect = $('#id_service_employee');  // Get the service select element
+        
+        // Disable the service select until the options are updated
+        serviceSelect.prop('disabled', true);
+        
+        // Clear existing options
+        serviceSelect.empty();
+        
+        // Make an AJAX request to fetch the services for the selected direction
+        $.ajax({
+          url: '/services/direction/',  // Replace with the URL of your view that returns the services
+          type: 'GET',
+          data: {direction_id: directionId},
+          success: function(result) {
+          // Populate the service select with the retrieved options
+          $.each(result.services, function(index, service) {
+            var option = $('<option>').val(service.id).text(service.nom);
+            serviceSelect.append(option);
+          });
+          
+          // Enable the service select
+          serviceSelect.prop('disabled', false);
+          },
+          error: function() {
+          console.log('Failed to fetch services');
+          }
+        });
+      });
+    });
+
+  </script>
+  {% comment %} 
+  Réaffectation automatique de l'agent en cas d'incapacité à résoudre le problème
+  Modification automatique de l'état d'un matériel en fonction du nombre de pannes
+  Limite du nombre de pannes a affecter a un agent
+  {% endcomment %}
+{% endblock main %}

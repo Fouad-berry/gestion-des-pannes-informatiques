@@ -1,0 +1,126 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
+# Create your models here.
+ETATS=(
+    ("en cours", "En cours de traitement"),
+    ("termine", "Termine")
+)
+
+class Direction(models.Model):
+    """Model definition for Direction."""
+
+    # TODO: Define fields here
+    code = models.CharField(_("Code de la direction"), max_length=50, unique=True)
+    nom = models.CharField(_("Nom de la direction"), max_length=255, unique=True)
+
+    class Meta:
+        """Meta definition for Direction."""
+
+        verbose_name = 'Direction'
+        verbose_name_plural = 'Directions'
+
+    def __str__(self):
+        """Unicode representation of Direction."""
+        return self.nom
+
+
+
+class Employee(models.Model):
+    user=models.OneToOneField(User, verbose_name=_("Employee"), on_delete=models.CASCADE)
+    direction_employee = models.ForeignKey(Direction, verbose_name=_("Direction"), on_delete=models.SET_NULL, null=True, blank=True)
+    bureau = models.CharField(_("Numero du bureau"), max_length=50)
+    poste = models.CharField(_("Poste"), max_length=50, default="employee")
+    contact = models.CharField(_("Numero de telephone"), max_length=50, null=True, blank=True)
+    adresse = models.CharField(_("Adresse"), max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        """Unicode representation of Division."""
+        return self.user.username 
+
+OBJETS= (
+    ('ordinateur', 'Ordinateurs Bureautiques'),
+    ('pc', 'Personnal Computer (PC)'),
+    ('imprimantes', 'Imprimantes'),
+    ('wi-fi', 'WI-FI'),
+    ('serveurs', 'Serveurs'),
+    ('logiciels', 'Logiciels'),
+)
+
+PRIORITES = (
+    ("Faible", "Faible"),
+    ("Normale", "Normale"),
+    ("Elevée", "Elevée"),
+)
+
+class Ticket(models.Model):
+    """Model definition for Ticket."""
+
+    # TODO: Define fields here
+    reference = models.CharField(_("Reference"), max_length=100, unique=True)
+    date = models.DateTimeField(_("Date"), auto_now=False, auto_now_add=True)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    plaignant = models.ForeignKey(Employee, verbose_name=_("Employé"), on_delete=models.CASCADE)
+    objet = models.CharField(_("Objets"), max_length=12, choices=OBJETS)
+    priorite = models.CharField(_("Priorité du ticket :"), max_length=11, choices=PRIORITES)
+    """ created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True) """
+
+    class Meta:
+        """Meta definition for Ticket."""
+
+        verbose_name = 'Ticket'
+        verbose_name_plural = 'Tickets'
+
+    def __str__(self):
+        """Unicode representation of Ticket."""
+        return self.reference
+
+
+class Panne(models.Model):
+    """Model definition for Panne."""
+
+    # TODO: Define fields here
+    agent = models.ForeignKey(Employee, verbose_name=_("Employe"), on_delete=models.SET_NULL, null=True, blank=True)
+    ticket=models.OneToOneField(Ticket, verbose_name=_(""), on_delete=models.CASCADE)
+    etat = models.CharField(_("Etat"), max_length=50, choices=ETATS, default="en cours")
+    observation = models.CharField(_("Obsservation"), max_length=255, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """Meta definition for Panne."""
+
+        verbose_name = 'Panne'
+        verbose_name_plural = 'Pannes'
+
+    def __str__(self):
+        """Unicode representation of Panne."""
+        return self.ticket.reference
+    
+
+class Commentaire(models.Model):
+    panne=models.ForeignKey(Panne, verbose_name=_(""), on_delete=models.CASCADE)
+    content=models.TextField(_("Contenu"))
+    employee=models.ForeignKey(Employee, verbose_name=_(""), on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self' , null=True , blank=True , on_delete=models.CASCADE , related_name='replies')
+
+    class Meta:
+        ordering=['-date_posted']
+
+    def __str__(self):
+        return str(self.author) + ' comment ' + str(self.content)
+
+    @property
+    def children(self):
+        return Commentaire.objects.filter(parent=self).reverse()
+
+    @property
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False
+
+

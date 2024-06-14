@@ -1,0 +1,193 @@
+{% extends 'profile2.html' %}
+{% block title %}Services{% endblock title %}
+{% load static %}
+{% block entete %}
+    <div class="text-end"><button class="btn btn-primary"><a class="text-decoration-none text-light" href="{% url "services:create-service" %}"><i class="bi bi-plus-circle-fill mr-2"></i> Ajouter</a></button></div>
+{% endblock entete %}
+{% block main %}
+  <div class="row d-flex mb-3">
+    <button type="button" class="btn-primary ml-auto" id="addDirectionModal" data-bs-toggle="modal" data-bs-target="#addModal"><i class="bi bi-plus-circle mr-2"></i>Nouveau Service</button>
+  </div>
+  {% comment %} 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 {% endcomment %}
+  <table id="example" class="display nowrap" style="width:100%">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Direction</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for service in services %}
+        <tr>
+          <td>{{ service.code }}</td>
+          <td>{{ service.nom }}</td>
+          <td>{{ service.direction_service }}</td>
+          <td>
+            <button class="btn btn-update" data-id="{{ service.id }}" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><a><i class="bi bi-pencil-fill text-warning" title="Modifier la ticket"></i></a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn">
+                <a href="">
+                    <i class="bi bi-trash3-fill text-danger" title="Supprimer la ticket"></i>
+                </a>
+            </button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Code</th>
+        <th>Nom</th>
+        <th>Direction</th>
+        <th>Action</th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script src="{% static "js\jquery-3.6.4.js" %}"></script>
+  <script>
+    $(document).ready(function() {
+        /* datatable*/
+      $('#example').DataTable({
+          scrollX: true,
+      });
+
+
+      console.log(1)
+      $(document).on('click', "#addService", function(event) {
+          event.preventDefault();
+          let formData = new FormData();
+          console.log(2) 
+          formData.append('code', $('#addServiceForm [name=code]').val());
+          formData.append('nom', $('#addServiceForm [name=nom]').val());
+          formData.append('direction_service',  $("#addServiceForm [name=direction_service] option:selected").val());
+          let csrfTokenValue = $('#addServiceForm [name=csrfmiddlewaretoken]').val();
+          console.log(3)
+          const request = new Request(decodeURI('{% url "services:create-service" %}'), {
+              method: 'POST',
+              body: formData,
+              headers: {'X-CSRFToken': csrfTokenValue}
+          });
+          fetch(request)
+          .then(response => response.json())
+          .then((result) => {
+              if(result.message === "SUCCESS") {
+                  $("#addModal").modal("hide")
+                  var tbody = $('#data-table-body');
+                  var row = $('<tr></tr>');
+                  row.append('<td>' + $('#addServiceForm [name=code]').val() + '</td>');
+                  row.append('<td>' + $('#addServiceForm [name=nom]').val() + '</td>');
+                  row.append('<td>' + $("#addServiceForm [name=direction_service] option:selected").text() + '</td>');
+                  row.append('<td> </td>');
+                  tbody.append(row);
+                  console.log(4)
+              } else {
+                  console.log(result)
+                  $("#invalid-feedback").text("Error")
+              }
+          })
+          console.log(5)
+
+      })
+
+      let btn = document.querySelectorAll(".btn-update")
+      btn.forEach((monBtn) => {
+          monBtn.addEventListener("click", function() {
+              let id = $(this).data("id")
+              $.ajax({
+                  method:'GET',
+                  url:"/services/service/"+id,
+                  data:{'id': id},
+                  success: function(formData) {
+                      $("[name=code]").val(formData["code"])
+                      $("[name=nom]").val(formData["nom"])
+                      $("[name=direction_service]").val(formData["direction_service"])
+                      $("[name=id]").val(formData["id"])
+                  },
+              });
+          })
+      })
+
+      $(document).on('click', "#updateService", function(event) {
+        event.preventDefault();
+        let formData = new FormData();
+        console.log(2) 
+        formData.append('code', $('#updateServiceForm [name=code]').val());
+        formData.append('nom', $('#updateServiceForm [name=nom]').val());
+        formData.append('direction_service',  $("#updateServiceForm [name=direction_service] option:selected").val());
+        let csrfTokenValue = $('#updateServiceForm [name=csrfmiddlewaretoken]').val();
+        console.log(3)
+        id=$("[name=id]").val();
+        const request = new Request(decodeURI("/services/update-service/"+ $("#updateServiceForm [name=id]").val()), {
+            method: 'POST',
+            body: formData,
+            headers: {'X-CSRFToken': csrfTokenValue}
+        });
+        fetch(request)
+        .then(response => response.text())
+        .then((result) => {
+          $("#addModal").modal("hide")
+        })
+        console.log(5)
+
+    })
+    });
+  </script>
+{% endblock %}
+
+{% block modal %}
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollablec">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addModalLabel">Modifier service</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+          </div>
+          <form id="updateServiceForm" method="post" >
+            <div class="modal-body">
+              <div class="invalid-feedback" id="invalid-feedback"></div>
+                  {% csrf_token %}
+                  {% for field in form %}
+                      <div class="mb-3">
+                      <label class="form-label">{{ field.label }}</label>
+                      {{ field }}
+                      </div>  
+                  {% endfor %}
+                  <input type="hidden" name="id" id="id_id" value="">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary" id="updateService" class="btn btn-gpi-primary">Modifier</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true" style="overflow: scroll;">
+  <div class="modal-dialog modal-dialog-scrollablec">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addModalLabel">Nouveau service</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+        </div>
+        <form id="addServiceForm" method="post" >
+          <div class="modal-body">
+            <div class="invalid-feedback" id="invalid-feedback"></div>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    </div>  
+                {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="saveBtn btn btn-primary" id="addService" class="btn btn-gpi-primary">Enregistrer</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock modal %}

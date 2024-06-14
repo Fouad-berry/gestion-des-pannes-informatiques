@@ -1,0 +1,50 @@
+{% extends 'profile2.html' %}
+{% load static %}
+{% block title %}
+    Utilisateurs
+{% endblock title %}
+{% block main %}
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Prenoms</th>
+                    <th>Nom</th>
+                    <th>Immatriculation</th>
+                    <th class="desactiver">Numero de bureau</th>
+                    <th>Poste</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.user.first_name }}</td>
+                    <td>{{ employee.user.last_name }}</td>
+                    <td>{{ employee.user.username }}</td>
+                    <td class="desactiver">{{ employee.bureau }}</td>
+                    <td>{{ employee.poste}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Id</th>
+                    <th>Prenoms</th>
+                    <th>Nom</th>
+                    <th>Immatriculation</th>
+                    <th class="desactiver">Numero de bureau</th>
+                    <th>Poste</th>
+                </tr>
+            </tfoot>
+        </table>
+  <!--Main layout-->
+  <script src="{% static "js/jquery-3.6.4.js"%}"></script>
+  <script>
+  $(document).ready(function () {
+    $('#example').DataTable({
+        scrollX: true,
+    });
+  });
+  </script>
+{% endblock %}

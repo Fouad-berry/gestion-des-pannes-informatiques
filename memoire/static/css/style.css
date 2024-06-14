@@ -1,0 +1,416 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: Lato, sans-serif !important;
+}
+  
+/* row icons and title path form inndex page*/
+.row__off .bi {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.row__off h2 {
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.row__off p {
+    font-size: 0.9rem;
+}
+
+
+/* .icon-block {
+    padding-left: 87px;
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+@media (min-width: 991.98px) {
+    .icon-block {
+        padding-left: 67px;
+        position: relative;
+        transition: color 0.3s ease-in-out;
+    }
+}
+
+@media (min-width: 798px) {
+    .icon-block {
+        padding-left: 47px;
+        position: relative;
+        transition: color 0.3s ease-in-out;
+    }
+}
+
+@media (min-width: 568px) {
+    .icon-block {
+        padding-left: 27px;
+        position: relative;
+        transition: color 0.3s ease-in-out;
+    }
+}
+
+@media (max-width: 568px) {
+    .icon-block {
+        padding-left: 7px;
+        position: relative;
+        transition: color 0.3s ease-in-out;
+    }
+} */
+
+
+/* Carousel immage */
+
+#carouselExampleCaptions .carousel-item .carousel-div {
+    object-fit: cover;
+    object-position: center;
+    position: center;
+    overflow: hidden;
+    height: 75vh;
+    margin: auto;
+}
+
+
+/* CS for sidebar template */
+
+body {
+    background-color: #fbfbfb;
+}
+
+@media (min-width: 991.98px) {
+    main {
+        padding-left: 240px;
+    }
+}
+
+
+/* Sidebar */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 58px 0 0;
+    /* Height of navbar */
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+    width: 240px;
+    z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%;
+    }
+}
+
+.sidebar .active {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+
+/* CSS for login template */
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+body {
+    margin-top: 20px;
+    background-color: #f7f7ff;
+}
+
+.radius-10 {
+    border-radius: 10px !important;
+}
+
+.border-info {
+    border-left: 5px solid #0dcaf0 !important;
+}
+
+.border-danger {
+    border-left: 5px solid #fd3550 !important;
+}
+
+.border-success {
+    border-left: 5px solid #15ca20 !important;
+}
+
+.border-warning {
+    border-left: 5px solid #ffc107 !important;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0px solid rgba(0, 0, 0, 0);
+    border-radius: .25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+}
+
+.bg-gradient-scooter {
+    background: #17ead9;
+    background: -webkit-linear-gradient(45deg, #17ead9, #6078ea) !important;
+    background: linear-gradient(45deg, #17ead9, #6078ea) !important;
+}
+
+.widgets-icons-2 {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ededed;
+    font-size: 27px;
+    border-radius: 10px;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.ms-auto {
+    margin-left: auto !important;
+}
+
+.bg-gradient-bloody {
+    background: #f54ea2;
+    background: -webkit-linear-gradient(45deg, #f54ea2, #ff7676) !important;
+    background: linear-gradient(45deg, #f54ea2, #ff7676) !important;
+}
+
+.bg-gradient-ohhappiness {
+    background: #00b09b;
+    background: -webkit-linear-gradient(45deg, #00b09b, #96c93d) !important;
+    background: linear-gradient(45deg, #00b09b, #96c93d) !important;
+}
+
+.bg-gradient-blooker {
+    background: #ffdf40;
+    background: -webkit-linear-gradient(45deg, #ffdf40, #ff8359) !important;
+    background: linear-gradient(45deg, #ffdf40, #ff8359) !important;
+}
+
+/* register page */
+
+.principal {
+    background: url("../../static/img/Flag_of_Benin.svg.png");
+    background-size: 100% 100%;
+}
+
+.height-set {
+    object-fit: cover;
+    object-position: center;
+    position: center;
+    overflow: hidden;
+    margin: auto;
+    height: 6vh;
+}
+
+.card img.register {
+    object-fit: cover;
+    object-position: center;
+    position: center;
+    overflow: hidden;
+    height: 35vh;
+    margin: auto;
+    top: -2000px;
+    left: -2000px;
+    right: -2000px;
+    bottom: -2000px;
+}
+
+.footer-div {
+    position: relative;
+    bottom: 0px;
+}
+
+.fill-div {
+    object-fit: cover;
+    object-position: center;
+    position: center;
+    overflow: hidden;
+    margin: auto;
+}
+
+.animation-benin {
+    animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+    0% {
+        background-color: #3445b4;
+        opacity: .8;
+    }
+
+    50% {
+        background-color: #3445b4;
+        opacity: .8;
+    }
+
+    100% {
+        background-color: #3445b4;
+        opacity: .8;
+    }
+
+}
+
+
+.parallax_cnt {
+    position: relative;
+}
+
+.bg-img-primary {
+    background: url("../img/page-1_img01.png") no-repeat !important;
+    top: -210px;
+    left: 47%;
+    width: 794px;
+    height: 794px;
+    position: relative;
+    z-index: 0
+}
+
+.well__off {
+    padding-bottom: 66px;
+}
+
+.well {
+    padding: 30px 0;
+    padding-bottom: 30px;
+}
+
+.bg-second {
+    background: rgba(195, 244, 205, 0.8) !important;
+}
+
+.gpi-primary {
+    color: #3445b4 !important;
+    opacity: .8;
+}
+
+.gpi-bg-primary {
+    background-color: #3445b4;
+    opacity: 1;
+}
+
+.btn-gpi-primary {
+    background-color: #3445b4 !important;
+    opacity: 1;
+    color: #fff !important;
+}
+
+.btn-gpi-primary:hover {
+    background-color: #3445b4;
+    opacity: .8;
+    color: #fff;
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .h-custom {
+        height: 100vh !important;
+    }
+
+    .desactiver {
+        display: none;
+    }
+
+    .contact-us-img-div img {
+        max-width: 350px;
+        margin: 0 auto;
+        height: 150px;
+    }
+}
+
+@media screen and (min-width: 575px) {
+    .text-initial {
+        text-align: justify;
+    }
+
+    .row.contact-us {
+        flex-direction: row-reverse !important;
+    }
+
+    .contact-us-img-div img {
+        object-fit: cover;
+        object-position: center;
+        position: center;
+        overflow: hidden;
+        margin: auto;
+        max-width: inherit;
+    }
+}
+
+@media screen and (min-width: 998px) {
+    .box-shadow {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .h-custom {
+        height: 100vh !important;
+    }
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #eee;
+    font-family: Helvetica, sans-serif;
+    
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.carousel-caption {
+    top: 50%;
+    transform: translateY(-50%);
+}

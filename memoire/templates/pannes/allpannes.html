@@ -1,0 +1,224 @@
+{% extends 'profile2.html' %}
+{% load static %}
+{% block title %}Pannes{% endblock title %}
+{% block main %}
+<table id="example" class="display nowrap" style="width:100%">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>materiel</th>
+      <th>Date</th>
+      <th>Agent</th>
+      <th>Statut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="data-table-body">
+    {% for panne in pannes %}
+    {% if panne.etat == "termine" %}
+    <tr class="table-success">
+    {%  else %}
+    <tr>
+    {% endif %}
+      
+        <td>{{ panne.id }}</td>
+        <td>{{ panne.ticket.materiel }}</td>
+        <td>{{ panne.ticket.created_at|date:'Y-m-d' }}</td>
+        <td class="agent-td">
+          {% if panne.agent %}
+            {{ panne.agent.user.username }}
+          {% else %}
+          {% if panne.etat == "termine" %}
+          {{ panne.agent.user.username }}
+          {% else %}
+          {% if user.is_superuser %}
+          <button type="button" class="btn btn-danger" id="pannePk" data-id="{{ panne.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">assigner</button>
+          {% else %}
+          NULL
+          {% endif %}
+          {% endif %}
+          {% endif %}
+        </td>
+        <td>
+          {% if panne.etat == "termine" %}
+          Terminée
+          {% else %}
+          En cours de traitement
+          {% endif %}
+        </td>
+        <td>
+          {% if panne.etat == "termine" %}
+          
+          {% else %}
+          <button type="button" class="btn" id="panneTerminerPk" data-id="{{ panne.id }}">
+            <i class="btn bi bi-check-circle-fill text-success" title="Terminer la tache"></i>
+          </button>
+          {% comment %} <a href="{% url "pannes:done-panne" panne.id %}"><i class="btn bi bi-check-circle-fill text-success" title="Terminer la tache"></i></a> {% endcomment %}
+          {% endif %}
+
+
+          <button type="button" class="btn" id="panneObservationPk" data-id="{{ panne.id }}" data-bs-toggle="modal" data-bs-target="#observationModal" data-bs-whatever="@mdo">
+            <i class="bi bi-question-circle text-warning"></i>
+          </button>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Id</th>
+      <th>materiel</th>
+      <th>Date</th>
+      <th>Agent</th>
+      <th>Statut</th>
+      <th>Action</th>
+    </tr>
+  </tfoot>
+</table>
+<div>
+</div>
+<script src="{% static "js\jquery-3.6.4.js" %}"></script>
+<script>
+  $(document).ready(function () {
+    $("#example").DataTable({
+      scrollX: true,
+    });
+  
+    $(document).on("click", "#pannePk", function () {
+      $("[name=panne]").val($(this).data("id"));
+    });
+
+
+    $(document).on('click', '#panneTerminerPk', function(){
+      const request = new Request(decodeURI("/pannes/done-panne/"+ $(this).data("id")), {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      fetch(request)
+      .then((response) => response.json())
+      .then((result) => {
+        if(result.message == 'succes'){
+          $(this).closest('tr').addClass('table-success')
+          $(this).addClass('d-none')
+        }
+        console.log(result);
+      });
+    })
+
+  
+
+    $(document).on("click", "#saveBtn", function (event) {
+      event.preventDefault();
+  
+      let formData = new FormData();
+      formData.append("agent", $("#agent option:selected").val());
+      formData.append("panneId", $("[name=panne]").val());
+      let csrfTokenValue = $("[name=csrfmiddlewaretoken]").val();
+  
+      const request = new Request(decodeURI('{% url "pannes:all-panne" %}'), {
+        method: "POST",
+        body: formData,
+        headers: { "X-CSRFToken": csrfTokenValue },
+      });
+  
+      fetch(request)
+        .then((response) => response.json())
+        .then((result) => {
+          $("[data-id='" + $("[name=panne]").val() + "']")
+            .closest("tr")
+            .find(".agent-td")
+            .text(result.agent);
+          $("#exampleModal").modal("hide");
+          console.log(result);
+        });
+    });
+
+    $(document).on("click", "#panneObservationPk", function () {
+      $("#ObservationForm [name=panneobservation]").val($(this).data("id"));
+    });
+
+    $(document).on("click", "#ObservationBtn", function (event) {
+      event.preventDefault();
+  
+      let formData = new FormData();
+      formData.append("observation", $("#ObservationForm [name=observation]").val());
+      let csrfTokenValue = $("#ObservationForm [name=csrfmiddlewaretoken]").val();
+  
+      const request = new Request(decodeURI("/pannes/observation/"+ $("#ObservationForm [name=panneobservation]").val()), {
+        method: "POST",
+        body: formData,
+        headers: { "X-CSRFToken": csrfTokenValue },
+      });
+  
+      fetch(request)
+        .then((response) => response.json())
+        .then((result) => {
+          $("#observationModal").modal("hide");
+          console.log(result);
+        });
+    });
+  });
+  
+</script>
+
+{% block modal %}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" data-id="{{ panne.id }}">Assigner un employé</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+        </div>
+        <div class="modal-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <input id="id_panne" name="panne" type="hidden">
+              <label for="message-text" class="col-form-label">Liste des employés:</label>
+              <select class="form-select form-control" aria-label="Default select example" name="agent" id="agent">
+                <option selected>Liste des employés</option>
+                {% for agent in agents %}
+                <option value="{{ agent.id }}">{{ agent.user.username }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+          <button type="submit" id="saveBtn" class="btn btn-primary">Assigner</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="observationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" data-id="{{ panne.id }}">Assigner un employé</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="ObservationForm">
+            {% csrf_token %}
+            <div class="mb-3">
+              <input id="id_panneobservation" name="panneobservation" type="hidden">
+              <label for="message-text" class="col-form-label text-align-top">Laissez votre observation</label>
+              <textarea col="10" row="20" name="observation" id="id_observation"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+          <button type="submit" id="ObservationBtn" class="btn btn-primary">Assigner</button>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock modal %}
+{% endblock %}
+

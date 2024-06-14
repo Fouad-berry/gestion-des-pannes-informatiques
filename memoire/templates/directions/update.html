@@ -1,0 +1,31 @@
+{% block modal %}
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modififer une direction</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" >
+            {% csrf_token %}
+            <div class="form-outline mb-3">
+              <label class="form-label" for="code">Code De Direction</label>
+              <input type="text" id="code" class="form-control"
+                     placeholder="Entrer le code la direction" name="code" value="{{ direction.code }}"/>
+            </div>
+            <div class="form-outline mb-3">
+              <label class="form-label" for="nom">Nom De Direction</label>
+              <input type="text" id="nom" class="form-control"
+                     placeholder="Entrer le nom la direction" name="nom" value="{{ direction.nom }}"/>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="submit" id="saveBtn" class="btn btn-primary">Assigner</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock modal %}

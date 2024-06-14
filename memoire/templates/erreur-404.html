@@ -1,0 +1,110 @@
+<div>
+    <h3>Oops! Vous ne pouvez pas acceder a cette page.</h3>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+      $.ajax({
+        url: '/pannes/pannes/',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var tbody = $('#data-table-body');
+    
+            // Clear existing table rows
+            tbody.empty();
+    
+            // Append new rows with data from the database
+            for (var i = 0; i < data.pannes.length; i++) {
+                var row = $('<tr></tr>');
+                if (data.pannes[i].etat === "termine") {
+                  row = $('<tr class="table-success"></tr>');
+                } else {
+                  row = $('<tr></tr>');
+                }
+                row.append('<td>' + data.pannes[i].id + '</td>');
+                row.append('<td>' + data.pannes[i].ticket__materiel__nom + '</td>');
+                row.append('<td>' + formatDate(data.pannes[i].created_at) + '</td>');
+    
+                if (data.pannes[i].agent__user__username) {
+                    row.append('<td>' + data.pannes[i].agent__user__username + '</td>');
+                } else {
+                    if (data.pannes[i].etat === "termine") {
+                        row.append('<td>NULL</td>');
+                    } else {
+                        var button = '<button type="button" class="btn btn-danger" id="pannePk" data-id="' + data.pannes[i].id + '" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">assigner</button>';
+                        row.append('<td>' + button + '</td>');
+                    }
+                }
+    
+                if (data.pannes[i].etat === "termine") {
+                    row.append('<td>Terminée</td>');
+                } else {
+                    row.append('<td>En cours de traitement</td>');
+                }
+    
+                if (data.pannes[i].etat !== "termine") {
+                    var actionButton = '<button class="btn"><a href="/pannes/done-panne/' + data.pannes[i].id + '"><i class="bi bi-check-circle-fill text-success" title="Terminer la tache">U+F26A</i></a></button>';
+                    row.append('<td>' + actionButton + '</td>');
+                }
+                tbody.append(row);
+            }
+  
+            console.log(data);
+  
+            $('#example').DataTable({
+                scrollX: true,
+            });
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log('Error:', errorThrown);
+        }
+    });
+    
+    function formatDate(date) {
+        var formattedDate = new Date(date);
+        var year = formattedDate.getFullYear();
+        var month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
+        var day = formattedDate.getDate().toString().padStart(2, '0');
+        return year + '-' + month + '-' + day;
+    }
+  
+  
+    $(document).on('click', '#pannePk', function() {
+      $("[name=panne]").val($(this).data('id'));
+    });
+  
+    // Attach click event handler to the save button
+    $(document).on('click', '#saveBtn', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      let formData = new FormData();
+      formData.append('agent', $('#agent option:selected').val());
+      formData.append('panneId', $("[name=panne]").val());
+      let csrfTokenValue = $('[name=csrfmiddlewaretoken]').val();
+      
+      const request = new Request(decodeURI('{% url "pannes:all-panne" %}'), {
+        method: 'POST',
+        body: formData,
+        headers: {'X-CSRFToken': csrfTokenValue}
+      });
+      
+      fetch(request)
+        .then(response => response.json())
+        .then(result => {
+          if (result.message == "SUCCESS") {
+            $("[data-id='" + $("[name=panne]").val() + "']").closest("tr").find(".agent-td").text(formData.get("agent"));
+            $("#exampleModal").modal("hide");
+          } else {
+            console.log(result);
+            $("#invalid-feedback").text("Error");
+          }
+        });
+    });
+  
+  
+  
+    /* datatable */
+  
+    });    
+  </script>

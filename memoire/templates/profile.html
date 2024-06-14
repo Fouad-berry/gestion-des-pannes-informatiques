@@ -1,0 +1,165 @@
+{% extends 'profile2.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock title %}
+{% block main %}
+<div class="container">
+    <div class="row">
+    <div class="col-md-3">
+      <div class="card-counter gpi-bg-primary">
+        <i class="fa fa-code-fork text-light"></i>
+        <span class="count-numbers text-light">{{nb_tot_pannes}}</span>
+        <span class="count-name text-light">Pannes</span>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-counter success">
+        <i class="fa fa-database"></i>
+        <span class="count-numbers">{{nb_tot_termine}}</span>
+        <span class="count-name">Pannes Terminées</span>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-counter danger">
+        <i class="fa fa-ticket"></i>
+        <span class="count-numbers">{{nb_tot_agents}}</span>
+        <span class="count-name">Agents</span>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-counter info">
+        <i class="fa fa-users"></i>
+    <span class="count-numbers">{{nb_users}}</span>
+        <span class="count-name">Employés</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <canvas id="panneChart"></canvas>
+</div>
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-12">
+      <table id="example" class="display nowrap" style="width:100%">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>materiel</th>
+            <th>Nombre de pannes</th>
+            <th>Pannes regles</th>
+            <th>Derniere panne</th>
+          </tr>
+        </thead>
+        <tbody id="data-table-body">
+          {% for panne in mes_pannes %}
+          <tr>
+              <td>{{ panne.materiel_id }}</td>
+              <td>{{ panne.materiel_nom }}</td>
+              <td>{{ panne.nbr_panne }}</td>
+              <td>{{ panne.nbr_panne_regle }}</td>
+              <td>{{panne.derniere_panne }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Id</th>
+            <th>materiel</th>
+            <th>Nombre de pannes</th>
+            <th>Pannes regles</th>
+            <th>Derniere panne</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    </div>
+  </div>
+</div>
+<script src="{% static "js/jquery-3.6.4.js"%}"></script>
+<script src="{% static "js/cdn.jsdelivr.net_npm_chart.js"%}"></script>
+<script>
+$(document).ready(function () {
+  $('#example').DataTable({
+      scrollX: true,
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Récupérer les données de pannes depuis Django
+  // Récupérer les données de pannes depuis Django
+var data = {{ data|safe }};
+
+// Créer un tableau pour stocker les valeurs des mois et des pannes
+var monthData = [];
+
+// Parcourir tous les mois de l'année
+for (var i = 1; i <= 12; i++) {
+    // Vérifier si les données existent pour le mois actuel
+    var month = data.find(function(item) {
+        return item.mois === i;
+    });
+
+    // Si les données existent, ajouter les valeurs correspondantes
+    if (month) {
+        monthData.push({
+            mois: i,
+            total_pannes: month.total_pannes,
+            pannes_resolues: month.pannes_resolues
+        });
+    } else {
+        // Si les données n'existent pas, ajouter des valeurs par défaut
+        monthData.push({
+            mois: i,
+            total_pannes: 0,
+            pannes_resolues: 0
+        });
+    }
+}
+
+// Extraire les mois et les nombres de pannes
+var labels = monthData.map(function(item) {
+    var data = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'];
+    return data[item.mois - 1];
+});
+var totalPannes = monthData.map(function(item) {
+    return item.total_pannes;
+});
+var pannesResolues = monthData.map(function(item) {
+    return item.pannes_resolues;
+});
+
+  // Créer le graphique
+  var ctx = document.getElementById('panneChart').getContext('2d');
+  var panneChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'Nombre de pannes',
+              data: totalPannes,
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+          }, {
+              label: 'Nombre de pannes résolues',
+              data: pannesResolues,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  precision: 0
+              }
+          }
+      }
+  });
+});
+</script>
+{% endblock main %}

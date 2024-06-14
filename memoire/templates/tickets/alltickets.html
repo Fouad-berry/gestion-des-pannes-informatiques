@@ -1,0 +1,41 @@
+{% extends 'profile2.html' %}
+{% block main %}
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Reference</th>
+            <th>Objet</th>
+            <th>Description</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.reference }}</td>
+            <td>{{ ticket.objet }}</td>
+            <td> {% if ticket.description %}{{ ticket.description}}{% else %}{{ ticket.etat}}{% endif %} </td>
+            <td>{{ ticket.date|date:'Y-m-d' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Id</th>
+            <th>Reference</th>
+            <th>Objet</th>
+            <th>Description</th>
+            <th>Date</th>
+        </tr>
+    </tfoot>
+</table>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            scrollX: true,
+        });
+    });
+</script>
+{% endblock %}

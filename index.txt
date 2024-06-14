@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dépannage Informatique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+        .button:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue sur notre service de dépannage informatique</h1>
+        <p>Nous sommes là pour vous aider à résoudre vos problèmes informatiques. Que ce soit pour la réparation de matériel, l'installation de logiciels ou le dépannage de problèmes logiciels, notre équipe d'experts est prête à intervenir.</p>
+        <p>Contactez-nous dès maintenant pour obtenir une assistance rapide et fiable.</p>
+        
+        <a href="contact.html" class="button">Nous contacter</a>
+    </div>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site de dépannage informatique</title>
+    <style>
+        /* Ajoutez votre CSS personnalisé ici */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Site de dépannage informatique</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Nos services</a></li>
+            <li><a href="tarifs.html">Tarifs</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Bienvenue sur notre site de dépannage informatique</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eleifend nulla nunc, nec dignissim lorem tincidunt ac. In et velit nisl. Sed nec enim id lectus eleifend cursus a nec nisl.</p>
+            <p>Donec fermentum, libero in rhoncus scelerisque, sem velit aliquet tortor, ac euismod tortor elit a metus. Vestibulum rhoncus felis nec libero posuere bibendum. Suspendisse cursus quam a enim scelerisque gravida.</p>
+        </section>
+
+        <section>
+            <h2>Nos services</h2>
+            <p>Consultez notre page <a href="services.html">Nos services</a> pour découvrir les différentes prestations que nous proposons.</p>
+        </section>
+
+        <section>
+            <h2>Tarifs</h2>
+            <p>Consultez notre page <a href="tarifs.html">Tarifs</a> pour connaître nos prix et conditions.</p>
+        </section>
+
+        <section>
+            <h2>Contact</h2>
+            <p>Vous pouvez nous contacter en utilisant le formulaire sur notre page <a href="contact.html">Contact</a>.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Site de dépannage informatique. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dépannage informatique</title>
+  <style>
+    /* Styles CSS pour la mise en page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bienvenue sur notre site de dépannage informatique</h1>
+    <p>Que puis-je faire pour vous aujourd'hui ?</p>
+    <a href="services.html" class="button">Voir nos services</a>
+    <a href="contact.html" class="button">Nous contacter</a>
+  </div>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dépannage informatique</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Dépannage informatique</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Accueil</a></li>
+        <li><a href="services.html">Nos services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Bienvenue sur notre site de dépannage informatique</h2>
+    <p>Nous sommes là pour vous aider à résoudre tous vos problèmes informatiques.</p>
+    <p>Contactez-nous dès maintenant pour obtenir une assistance professionnelle.</p>
+    <a href="contact.html" class="cta-button">Nous contacter</a>
+  </section>
+
+  <footer>
+    <p>&copy; 2023 Dépannage informatique. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>
+
+
+<h2>Bienvenue sur notre site de dépannage informatique</h2>
+    <p>Vous rencontrez des problèmes avec votre ordinateur ? Ne vous inquiétez pas, notre équipe d'experts est là pour vous aider.</p>
+    <p>Nous proposons une large gamme de services de dépannage informatique pour résoudre tous types de problèmes, que ce soit des pannes matérielles, des infections virales, des problèmes de réseau, ou des erreurs logicielles.</p>
+    <p>Notre équipe compétente et expérimentée mettra tout en œuvre pour vous fournir des solutions rapides et efficaces afin de vous permettre de retrouver un fonctionnement optimal de votre ordinateur.</p>
+    <p>N'hésitez pas à nous contacter pour toute demande de dépannage. Nous sommes disponibles 24/7 pour répondre à vos besoins.</p>
+    <p>Merci de visiter notre site, nous espérons pouvoir vous aider prochainement !</p>
+  </main>
+
+
+
+  <header>
+    <h1>Dépannage et Maintenance Informatique</h1>
+  </header>
+  <main>
+    <h2>Bienvenue sur notre site de dépannage et de maintenance informatique</h2>
+    <p>Notre équipe d'experts est là pour vous aider à résoudre tous vos problèmes informatiques. Que ce soit un ordinateur lent, un virus ou un écran cassé, nous sommes prêts à intervenir rapidement et efficacement.</p>
+    <h3>Nos services</h3>
+    <ul>
+      <li>Réparation matériel et logiciel</li>
+      <li>Suppression de virus et de logiciels malveillants</li>
+      <li>Optimisation des performances</li>
+      <li>Récupération de données</li>
+      <li>Installation et configuration de réseaux</li>
+      <li>Assistance à distance</li>
+    </ul>
+    <h3>Contactez-nous</h3>
+    <p>Pour toute demande de dépannage ou de maintenance, n'hésitez pas à nous contacter :</p>
+    <p>Téléphone : <strong>01 234 567 89</strong></p>
+    <p>Email : <strong>info@depannageinformatique.com</strong></p>
+  </main>
